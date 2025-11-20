@@ -1,0 +1,119 @@
+###Verificacion 
+GET http://localhost:3000/api/services/status
+
+###Verificacion individual
+GET http://localhost:3003/health
+
+###POST /api/auth/register - Registrar un usuario
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "us_nombre": "Hector",
+  "us_email": "hector@ossandon.com",
+  "us_contrasena": "sistemas infernales",
+  "us_icono": "icono.png",
+  "us_fecha_nacimiento": "1900-01-01"
+}
+
+
+###POST /api/auth/login - Login de usuario
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "juan@cliente.com",
+  "password": "pass123"
+}
+
+###w
+Cliente:
+
+### Productos a través del middleware
+GET http://localhost:3000/api/productos
+
+###2) GET /api/categorias - Todas las categorías
+GET http://localhost:3000/api/categorias
+
+###3) GET /api/productos/categoria/:ct_id - Productos por categoría
+GET http://localhost:3000/api/productos/categoria/1
+
+###4) GET /api/carrito/:us_id - Ver carrito
+GET http://localhost:3000/api/carrito/1
+
+###5) GET /api/compras/:us_id - Ver compras del usuario
+GET http://localhost:3000/api/compras/2
+
+###6) POST /api/carrito - Agregar al carrito - Si esta actualiza la cantidad
+POST http://localhost:3000/api/carrito
+Content-Type: application/json
+
+{
+  "pu_cantidad": 7,
+  "us_id": 1,
+  "pr_id": 1
+}
+
+
+###7) PATCH /api/carrito/:pu_id - Actualizar cantidad en carrito(venta_id es null)
+PATCH http://localhost:3000/api/carrito/7
+Content-Type: application/json
+
+{
+  "pu_cantidad": 3 
+}
+
+###8) DELETE /api/carrito/:pu_id - Eliminar del carrito
+DELETE http://localhost:3000/api/carrito/10
+
+###9) POST /api/compras - Concretar compra
+POST http://localhost:3000/api/compras
+Content-Type: application/json
+
+{
+  "us_id": 1
+}
+
+
+###
+Administrador:
+
+###POST /api/admin/productos - Crear producto
+POST http://localhost:3000/api/admin/productos
+Content-Type: application/json
+
+{
+  "pr_nombre": "Aceite",
+  "pr_precio": 2499,
+  "pr_imagen": "Aceite.png",
+  "ct_id": 2
+}
+###PATCH /api/admin/productos/:pr_id - Actualizar producto
+PATCH http://localhost:3000/api/admin/productos/13
+Content-Type: application/json
+
+{
+  "pr_nombre": "Aceite actualizado",
+  "pr_precio": 2500
+}
+
+###DELETE /api/admin/productos/:pr_id - Eliminar producto
+DELETE http://localhost:3000/api/admin/productos/14
+
+###POST /api/admin/categorias - Crear categoría
+POST http://localhost:3000/api/admin/categorias
+Content-Type: application/json
+
+{
+  "ct_nombre": "Grasosa"
+}
+
+###PATCH /api/admin/categorias/:ct_id - Actualizar categoría
+PATCH http://localhost:3000/api/admin/categorias/5
+Content-Type: application/json
+
+{
+  "ct_nombre": "Grasa actualizada :v"
+}
+###DELETE /api/admin/categorias/:ct_id - Eliminar categoría
+DELETE http://localhost:3000/api/admin/categorias/5
