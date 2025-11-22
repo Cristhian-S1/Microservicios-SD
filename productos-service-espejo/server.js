@@ -1,16 +1,10 @@
 const express = require("express");
-const { Pool } = require("pg");
+const { createPool } = require("../shared/db");
 
 const app = express();
 const PORT = 3004;
 
-const pool = new Pool({
-  user: "cristhian",
-  host: "localhost",
-  database: "dae",
-  password: "femayor9",
-  port: 5432,
-});
+const pool = new createPool("dae");
 
 app.use(express.json());
 
