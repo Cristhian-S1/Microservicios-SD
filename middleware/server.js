@@ -8,7 +8,7 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
-//Microservicios
+// Microservicios
 const services = {
   auth: { url: "http://localhost:3001", name: "Servicio de auth" },
   productos: {
@@ -37,17 +37,15 @@ async function checkServiceHealth(serviceUrl) {
 async function getActiveServiceUrl(serviceName) {
   const service = services[serviceName];
 
-  // Verificar servicio principal
   const principalActive = await checkServiceHealth(service.principal.url);
   if (principalActive) {
     console.log(`${service.name} - Usando servicio PRINCIPAL`);
     return service.principal.url;
   }
 
-  // Si falla, usamos el espejo(se consigue bajando el principal)
   const espejoActive = await checkServiceHealth(service.espejo.url);
   if (espejoActive) {
-    console.log(`${service.name} - Principal caido, usando ESPEJO`);
+    console.log(`${service.name} - Principal caído, usando ESPEJO`);
     return service.espejo.url;
   }
 
@@ -55,13 +53,7 @@ async function getActiveServiceUrl(serviceName) {
 }
 
 // Proxy generico para servicios con espejo
-async function proxyToServiceWithMirror(
-  req,
-  res,
-  serviceName,
-  path,
-  method = "GET"
-) {
+async function proxyToServiceWithMirror(req, res, serviceName, path, method = "GET") {
   try {
     const serviceUrl = await getActiveServiceUrl(serviceName);
     const url = `${serviceUrl}${path}`;
@@ -105,17 +97,18 @@ async function proxyToService(req, res, serviceUrl, path, method = "GET") {
   }
 }
 
-//login
+// ===== RUTAS =====
+
+// Auth
 app.post("/api/auth/login", (req, res) =>
   proxyToService(req, res, services.auth.url, "/login", "POST")
 );
 
-//register
 app.post("/api/auth/register", (req, res) =>
   proxyToService(req, res, services.auth.url, "/register", "POST")
 );
 
-//Productos con espejo
+// Productos con espejo
 app.get("/api/productos", (req, res) =>
   proxyToServiceWithMirror(req, res, "productos", "/productos", "GET")
 );
@@ -182,7 +175,7 @@ app.delete("/api/admin/categorias/:ct_id", (req, res) =>
   )
 );
 
-//Carrito con espejo
+// Carrito con espejo
 app.get("/api/carrito/:us_id", (req, res) =>
   proxyToServiceWithMirror(
     req,
@@ -217,6 +210,7 @@ app.delete("/api/carrito/:pu_id", (req, res) =>
   )
 );
 
+// Compras
 app.get("/api/compras/:us_id", (req, res) =>
   proxyToServiceWithMirror(
     req,
@@ -227,16 +221,17 @@ app.get("/api/compras/:us_id", (req, res) =>
   )
 );
 
+// ** Checkout / finalizar compra **
 app.post("/api/compras", (req, res) =>
-  proxyToServiceWithMirror(req, res, "carrito", "/compras", "POST")
+  proxyToServiceWithMirror(req, res, "carrito", "/finalizar", "POST")
 );
 
-//verificacion
+// Verificación de estado
 app.get("/health", (req, res) => {
   res.json({ status: "ok", service: "Middleware/API Gateway" });
 });
 
-//estado de servicios
+// Estado de servicios
 app.get("/api/services/status", async (req, res) => {
   const status = {
     auth: await checkServiceHealth(services.auth.url),
@@ -252,6 +247,7 @@ app.get("/api/services/status", async (req, res) => {
   res.json(status);
 });
 
+// ===== LISTENER =====
 app.listen(PORT, () => {
   console.log(`Middleware/API Gateway corriendo en http://localhost:${PORT}`);
   console.log(

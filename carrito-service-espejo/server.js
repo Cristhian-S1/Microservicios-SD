@@ -4,7 +4,7 @@ const { createPool } = require("../shared/db");
 const app = express();
 const PORT = 3006;
 
-const pool = new createPool("dae");
+const pool = new createPool();
 
 app.use(express.json());
 
