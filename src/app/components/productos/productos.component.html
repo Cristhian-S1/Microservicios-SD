@@ -1,7 +1,98 @@
-<div *ngFor="let producto of productos" class="producto">
-  <h3>{{ producto.pr_nombre }}</h3>
-  <p>Precio: ${{ producto.pr_precio }}</p>
-  <p>ID: {{ producto.pr_id }}</p>
-</div>
+<div class="max-w-[1200px] mx-auto px-6 py-12">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-8">
+    <h2 class="text-2xl font-bold tracking-wide">Productos</h2>
 
-<p *ngIf="productos.length === 0">No hay productos disponibles</p>
+    <div class="flex items-center gap-6">
+      <!-- Botón Ver Todos -->
+      <a
+        href="#"
+        class="inline-block bg-white border border-gray-200 rounded-full px-5 py-2 font-semibold shadow-sm text-[#074BA1] hover:bg-gray-50 transition-colors duration-200"
+      >
+        View all Apparel
+      </a>
+
+      <!-- Carrito -->
+      <div class="relative cursor-pointer" (click)="irAlCarrito()">
+        <img
+          src="https://img.icons8.com/ios-filled/50/074BA1/shopping-cart.png"
+          class="w-7 h-7 hover:scale-110 transition-transform"
+        />
+
+        <!-- Burbuja contador -->
+        <span
+          *ngIf="cantidadCarrito > 0"
+          class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow"
+        >
+          {{ cantidadCarrito }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!--filter -->
+  <form class="flex flex-col md:flex-row gap-3">
+    <div class="flex">
+      <input
+        type="text"
+        placeholder="Search for the tool you like"
+        class="w-full md:w-80 px-3 h-10 rounded-l border-[#074BA1] focus:outline-none focus:border-[#074BA1]"
+      />
+      <button
+        type="submit"
+        class="bg-[#074BA1] text-white rounded-r px-2 md:px-3 py-0 md:py-1"
+      >
+        Search
+      </button>
+    </div>
+    <select
+      id="categoriaSelect"
+      name="categoriaSelect"
+      (change)="onCategoriaChange($event)"
+      class="w-full h-10 border-2 border-[#074BA1] focus:outline-none focus:border-[#074BA1] text-[#074BA1] rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
+    >
+      <option value="all" selected="">Todas las categorias</option>
+
+      <option *ngFor="let categoria of categorias" [value]="categoria.ct_id">
+        {{ categoria.ct_nombre }}
+      </option>
+    </select>
+  </form>
+  <!-- Grid -->
+  <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    <article
+      *ngFor="let producto of productos"
+      class="relative bg-[#D6E1E5] rounded-2xl p-10 min-h-[480px] flex flex-col items-center transition-transform duration-300 ease-out hover:-translate-y-2 hover:shadow-xl group"
+    >
+      <span
+        *ngIf="false"
+        class="absolute top-4 right-4 bg-black text-white rounded-full px-3 py-1 text-xs font-semibold"
+        >Promo</span
+      >
+
+      <img
+        class="w-3/4 max-w-[300px] object-contain mt-4 transform transition-transform duration-300 group-hover:scale-105"
+        [src]="
+          producto.pr_imagen ||
+          'https://via.placeholder.com/420x560.png?text=Sin+Imagen'
+        "
+        [alt]="producto.pr_nombre"
+        loading="lazy"
+      />
+
+      <div class="mt-auto text-center">
+        <div class="mt-6 font-semibold text-sm">{{ producto.pr_nombre }}</div>
+        <div class="text-sm mt-2">
+          ${{ producto.pr_precio | number : "1.2-2" }}
+        </div>
+
+        <button
+          class="mt-4 bg-[#074BA1] text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-blue-800 transition-colors"
+          (click)="agregarAlCarrito(producto)"
+        >
+          Añadir al Carrito
+        </button>
+      </div>
+    </article>
+  </div>
+</div>

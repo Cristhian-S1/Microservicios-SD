@@ -1,1 +1,90 @@
-<p>carrito works!</p>
+<div class="bg-gray-100 min-h-screen py-8">
+  <div class="container mx-auto px-4">
+    <h1 class="text-3xl font-bold mb-6 text-[#074BA1]">
+      🛒 Carrito de Compras
+    </h1>
+
+    <div class="flex flex-col md:flex-row gap-6">
+      <!-- Lista de productos -->
+      <div class="md:w-3/4">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-4">
+          <table class="w-full">
+            <thead class="border-b">
+              <tr>
+                <th class="text-left font-semibold py-2">Producto</th>
+                <th class="text-left font-semibold py-2">Precio</th>
+                <th class="text-left font-semibold py-2">Cantidad</th>
+                <th class="text-left font-semibold py-2">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of carritoAgrupado" class="border-b">
+                <!-- Producto con imagen y nombre -->
+                <td class="py-4">
+                  <div class="flex items-center gap-4">
+                    <img
+                      [src]="item.imagen"
+                      alt="{{ item.nombre }}"
+                      class="w-16 h-16 object-contain rounded"
+                    />
+                    <span class="font-semibold">{{ item.nombre }}</span>
+                  </div>
+                </td>
+
+                <!-- Precio unitario -->
+                <td class="py-4">${{ item.precio | number : "1.0-0" }}</td>
+                <!-- Total por producto -->
+                <td class="py-4 font-semibold">
+                  {{ item.cantidad | number : "1.0-0" }}
+                </td>
+
+                <!-- Cantidad con botones -->
+                <td class="py-4 font-semibold">
+                  ${{ item.precio * item.cantidad | number : "1.0-0" }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Resumen del carrito -->
+      <div class="md:w-1/4">
+        <div class="bg-white rounded-lg shadow-md p-6 space-y-4">
+          <h2 class="text-lg font-semibold mb-2">Resumen</h2>
+          <div class="flex justify-between">
+            <span>Subtotal</span>
+            <span>${{ totalGeneral | number : "1.0-0" }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Envío</span>
+            <span>Gratis</span>
+          </div>
+          <hr class="my-2" />
+          <div class="flex justify-between font-semibold text-lg">
+            <span>Total</span>
+            <span>${{ totalGeneral | number : "1.0-0" }}</span>
+          </div>
+          <button
+            (click)="checkout()"
+            class="bg-[#074BA1] text-white py-2 px-4 rounded-lg w-full hover:bg-blue-700 transition"
+          >
+            Checkout
+          </button>
+
+          <button
+            (click)="limpiarCarrito()"
+            class="bg-red-600 text-white py-2 px-4 rounded-lg w-full hover:bg-red-700 transition"
+          >
+            Vaciar carrito
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carrito vacío -->
+    <div *ngIf="carritoAgrupado.length === 0" class="text-center mt-20">
+      <p class="text-xl text-gray-500">Tu carrito está vacío</p>
+    </div>
+  </div>
+</div>
