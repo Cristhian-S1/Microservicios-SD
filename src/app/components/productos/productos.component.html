@@ -58,36 +58,43 @@
       </option>
     </select>
   </form>
-  <!-- Grid -->
-  <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+
+  <!-- Grid de productos mejorado -->
+  <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8">
     <article
       *ngFor="let producto of productos"
-      class="relative bg-[#D6E1E5] rounded-2xl p-10 min-h-[480px] flex flex-col items-center transition-transform duration-300 ease-out hover:-translate-y-2 hover:shadow-xl group"
+      class="relative bg-[#D6E1E5] rounded-2xl p-6 min-h-[480px] flex flex-col transition-transform duration-300 ease-out hover:-translate-y-2 hover:shadow-xl group"
     >
       <span
         *ngIf="false"
-        class="absolute top-4 right-4 bg-black text-white rounded-full px-3 py-1 text-xs font-semibold"
+        class="absolute top-4 right-4 bg-black text-white rounded-full px-3 py-1 text-xs font-semibold z-10"
         >Promo</span
       >
 
-      <img
-        class="w-3/4 max-w-[300px] object-contain mt-4 transform transition-transform duration-300 group-hover:scale-105"
-        [src]="
-          producto.pr_imagen ||
-          'https://via.placeholder.com/420x560.png?text=Sin+Imagen'
-        "
-        [alt]="producto.pr_nombre"
-        loading="lazy"
-      />
+      <!-- Contenedor de imagen con tamaño fijo -->
+      <div class="flex-1 flex items-center justify-center mb-4 min-h-[280px]">
+        <img
+          class="w-full h-full max-h-[280px] object-contain transform transition-transform duration-300 group-hover:scale-105"
+          [src]="
+            producto.pr_imagen ||
+            'https://via.placeholder.com/420x560.png?text=Sin+Imagen'
+          "
+          [alt]="producto.pr_nombre"
+          loading="lazy"
+        />
+      </div>
 
-      <div class="mt-auto text-center">
-        <div class="mt-6 font-semibold text-sm">{{ producto.pr_nombre }}</div>
+      <!-- Contenido de la tarjeta -->
+      <div class="text-center">
+        <div class="font-semibold text-sm line-clamp-2">
+          {{ producto.pr_nombre }}
+        </div>
         <div class="text-sm mt-2">
           ${{ producto.pr_precio | number : "1.2-2" }}
         </div>
 
         <button
-          class="mt-4 bg-[#074BA1] text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-blue-800 transition-colors"
+          class="mt-4 bg-[#074BA1] text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-blue-800 transition-colors w-full"
           (click)="agregarAlCarrito(producto)"
         >
           Añadir al Carrito

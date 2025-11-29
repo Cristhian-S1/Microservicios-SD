@@ -63,7 +63,7 @@ export class LoginComponent {
             if (response.datos.es_admin) {
               this.router.navigate(["/admin/dashboard"]);
             } else {
-              this.router.navigate(["/carrito"]);
+              this.router.navigate(["/catalogo"]);
             }
           }, 1000);
         },

@@ -25,8 +25,10 @@ export class CarritoComponent {
   }
 
   cargarDesdeLocalStorage() {
-    const data = localStorage.getItem("carrito");
-    this.carritoOriginal = data ? JSON.parse(data) : [];
+    this.carritoOriginal = this.cartService.obtenerCarrito();
+
+    //const data = localStorage.getItem("carrito");
+    //this.carritoOriginal = data ? JSON.parse(data) : [];
   }
 
   agruparCarrito() {
@@ -58,6 +60,7 @@ export class CarritoComponent {
 
   limpiarCarrito() {
     localStorage.removeItem("carrito");
+    this.cartService.limpiarCarrito();
     this.carritoOriginal = [];
     this.carritoAgrupado = [];
     this.totalGeneral = 0;
