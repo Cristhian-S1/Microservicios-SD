@@ -9,9 +9,9 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-  "us_nombre": "Hector",
-  "us_email": "hector@ossandon.com",
-  "us_contrasena": "sistemas infernales",
+  "us_nombre": "Maria",
+  "us_email": "maria@gmail.com",
+  "us_contrasena": "sistemas_infernales",
   "us_icono": "icono.png",
   "us_fecha_nacimiento": "1900-01-01"
 }

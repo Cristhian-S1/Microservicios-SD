@@ -203,17 +203,6 @@ app.post("/compras", async (req, res) => {
   }
 });
 
-app.get("/health", (req, res) => {
-  res.json({ status: "ok", service: "Servicio de carrito (Principal)" });
-});
-
-app.listen(PORT, () => {
-  console.log(
-    `Servicio de carrito (Principal) corriendo en http://localhost:${PORT}`
-  );
-});
-
-
 // Concretar compra (crear venta y asignar productos)
 app.post("/finalizar", async (req, res) => {
   const client = await pool.connect();
@@ -221,10 +210,20 @@ app.post("/finalizar", async (req, res) => {
     const { us_id, productos } = req.body;
     // productos = [{ pr_id: 1, pu_cantidad: 2 }, { pr_id: 4, pu_cantidad: 1 }]
 
-    if (!us_id || !productos || !Array.isArray(productos) || productos.length === 0) {
-      return res.status(400).json(
-        respuestaError(400, "Datos incompletos: usuario y productos requeridos")
-      );
+    if (
+      !us_id ||
+      !productos ||
+      !Array.isArray(productos) ||
+      productos.length === 0
+    ) {
+      return res
+        .status(400)
+        .json(
+          respuestaError(
+            400,
+            "Datos incompletos: usuario y productos requeridos"
+          )
+        );
     }
 
     await client.query("BEGIN");
@@ -235,7 +234,7 @@ app.post("/finalizar", async (req, res) => {
     );
     const vt_id = venta.rows[0].vt_id;
     // Insertar productos asociados a esa venta
-    const insertPromises = productos.map(p =>
+    const insertPromises = productos.map((p) =>
       client.query(
         "INSERT INTO producto_usuario (pu_cantidad, us_id, pr_id, vt_id) VALUES ($1, $2, $3, $4) RETURNING *",
         [p.pu_cantidad, us_id, p.pr_id, vt_id]
@@ -246,7 +245,10 @@ app.post("/finalizar", async (req, res) => {
 
     await client.query("COMMIT");
     res.json(
-      respuestaExitosa(result.map(r => r.rows[0]), "Compra realizada exitosamente")
+      respuestaExitosa(
+        result.map((r) => r.rows[0]),
+        "Compra realizada exitosamente"
+      )
     );
   } catch (error) {
     await client.query("ROLLBACK");
@@ -255,4 +257,14 @@ app.post("/finalizar", async (req, res) => {
   } finally {
     client.release();
   }
+});
+
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", service: "Servicio de carrito (Principal)" });
+});
+
+app.listen(PORT, () => {
+  console.log(
+    `Servicio de carrito (Principal) corriendo en http://localhost:${PORT}`
+  );
 });

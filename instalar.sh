@@ -6,7 +6,11 @@ echo "Instalando dependencias en todos los servicios..."
 )
 
 (
-  cd auth-service && npm install && npm install dotenv
+  cd login-service && npm install && npm install dotenv
+)
+
+(
+  cd registro-service && npm install && npm install dotenv
 )
 
 (
